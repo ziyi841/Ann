@@ -1,20 +1,31 @@
-// 等待 DOM 載入完成
-document.addEventListener('DOMContentLoaded', () => {
-    
-    const navbar = document.querySelector('.navbar');
+// Ann Yang Portfolio interactions
+document.addEventListener("DOMContentLoaded", () => {
+  const header = document.querySelector(".site-header");
+  const toggle = document.querySelector(".menu-toggle");
+  const navLinks = document.querySelector(".nav-links");
+  const year = document.querySelector("#year");
 
-    // 監聽滾動事件
-    window.addEventListener('scroll', () => {
-        // 如果滾動超過 50px，導覽列加入陰影與背景加深
-        if (window.scrollY > 50) {
-            navbar.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.3)';
-            navbar.style.background = '#0b0e14';
-        } else {
-            navbar.style.boxShadow = 'none';
-            navbar.style.background = 'rgba(11, 14, 20, 0.95)';
-        }
+  if (year) year.textContent = new Date().getFullYear();
+
+  const updateHeader = () => {
+    if (header) header.classList.toggle("is-scrolled", window.scrollY > 12);
+  };
+  updateHeader();
+  window.addEventListener("scroll", updateHeader, { passive: true });
+
+  if (toggle && navLinks) {
+    toggle.addEventListener("click", () => {
+      const isOpen = navLinks.classList.toggle("is-open");
+      toggle.setAttribute("aria-expanded", String(isOpen));
+      toggle.setAttribute("aria-label", isOpen ? "關閉導覽選單" : "開啟導覽選單");
     });
 
-    // 簡單的點擊回饋效果 (未來可擴充)
-    console.log("Welcome to my digital space!");
+    navLinks.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        navLinks.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.setAttribute("aria-label", "開啟導覽選單");
+      });
+    });
+  }
 });
